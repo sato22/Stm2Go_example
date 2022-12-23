@@ -8,7 +8,6 @@ type CountdownStm1State uint8
 
 const (
 	CountdownStm1WaitOneSec CountdownStm1State = iota
-	CountdownStm1OneSecDecrease
 	CountdownStm1CountdownWaitRelease
 )
 
@@ -35,7 +34,7 @@ func CountdownStm1Task() {
 			CountdownStm1WaitOneSecDo()
 			if CountdownStm1WaitOneSeconeSecPassCond() {
 				CountdownStm1WaitOneSeconeSecPassAction()
-				CountdownStm1CurrentState = CountdownStm1OneSecDecrease
+				CountdownStm1CurrentState = CountdownStm1WaitOneSec
 				CountdownStm1Eod = Exit
 			}
 			if CountdownStm1WaitOneSecstopButtonPushCond() {
@@ -46,23 +45,6 @@ func CountdownStm1Task() {
 		}
 		if CountdownStm1Eod == Exit {
 			CountdownStm1WaitOneSecExit()
-			CountdownStm1Eod = Entry
-		}
-	case CountdownStm1OneSecDecrease:
-		if CountdownStm1Eod == Entry {
-			CountdownStm1OneSecDecreaseEntry()
-			CountdownStm1Eod = Do
-		}
-		if CountdownStm1Eod == Do {
-			CountdownStm1OneSecDecreaseDo()
-			if CountdownStm1OneSecDecreasenothingCond() {
-				CountdownStm1OneSecDecreasenothingAction()
-				CountdownStm1CurrentState = CountdownStm1WaitOneSec
-				CountdownStm1Eod = Exit
-			}
-		}
-		if CountdownStm1Eod == Exit {
-			CountdownStm1OneSecDecreaseExit()
 			CountdownStm1Eod = Entry
 		}
 	case CountdownStm1CountdownWaitRelease:

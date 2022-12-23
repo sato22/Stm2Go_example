@@ -52,7 +52,7 @@ func AlarmOnStm0AlarmOnWaitReleaseExit() {
 ///////////////////////////////////////////////
 
 func AlarmOnStm0BeepstopButtonPushCond() bool {
-	return !buttonR.Get()
+	return !rRelease
 }
 
 ///////////////////////////////////////////////

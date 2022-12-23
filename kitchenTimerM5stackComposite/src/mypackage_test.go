@@ -63,7 +63,7 @@ var screen = &Screen{}
 
 var buzzer = &Buzzer{}
 
-func TestExample(t *testing.T) {
+func TestExample01(t *testing.T) {
 	env := stm2go.NewTestEnv() // TestEnv構造体
 
 	ConfigureLeftButton(leftButton)
@@ -80,7 +80,9 @@ func TestExample(t *testing.T) {
 	env.Add(stm2go.Continue, func() {
 		for {
 			time.Sleep(10 * time.Millisecond)
+			Input()
 			rootStm3Task()
+			Output()
 		}
 	},
 	)
@@ -129,7 +131,9 @@ func TestExample02(t *testing.T) {
 	env.Add(stm2go.Continue, func() {
 		for {
 			time.Sleep(10 * time.Millisecond)
+			Input()
 			rootStm3Task()
+			Output()
 		}
 	},
 	)

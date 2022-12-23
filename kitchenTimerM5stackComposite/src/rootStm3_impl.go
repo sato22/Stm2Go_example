@@ -80,7 +80,7 @@ func rootStm3TimerSetExit() {
 ///////////////////////////////////////////////
 
 func rootStm3AlarmOnstopButtonReleaseCond() bool {
-	return (AlarmOnStm0CurrentState == AlarmOnStm0AlarmOnWaitRelease) && buttonR.Get()
+	return (AlarmOnStm0CurrentState == AlarmOnStm0AlarmOnWaitRelease) && rRelease
 }
 
 func rootStm3CountdowncountDownEndCond() bool {
@@ -88,11 +88,11 @@ func rootStm3CountdowncountDownEndCond() bool {
 }
 
 func rootStm3CountdownstopButtonReleaseCond() bool {
-	return (CountdownStm1CurrentState == CountdownStm1CountdownWaitRelease) && buttonR.Get()
+	return (CountdownStm1CurrentState == CountdownStm1CountdownWaitRelease) && rRelease
 }
 
 func rootStm3TimerSetstartButtonReleaseCond() bool {
-	return (TimerSetStm2CurrentState == TimerSetStm2TimerWaitRelease) && buttonR.Get()
+	return (TimerSetStm2CurrentState == TimerSetStm2TimerWaitRelease) && rRelease
 }
 
 ///////////////////////////////////////////////

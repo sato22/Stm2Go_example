@@ -4,6 +4,7 @@ package mypackage
 import (
 	"fmt"
 	"image/color"
+	"time"
 )
 
 // package names to be imported
@@ -34,6 +35,10 @@ const (
 	countSecond = 8
 )
 
+///////////////////////////////////////////////
+// functions for button
+///////////////////////////////////////////////
+
 type Switch interface {
 	Get() bool
 }
@@ -62,6 +67,10 @@ func ConfigureRightButton(s Switch) {
 	buttonR = s
 }
 
+///////////////////////////////////////////////
+// functions for Monitor
+///////////////////////////////////////////////
+
 // interface Monitor
 // ディスプレイに文字が表示され、表示が更新されることを確認するためのインターフェース
 type Monitor interface {
@@ -73,6 +82,10 @@ var display Monitor
 func ConfigureMonitor(m Monitor) {
 	display = m
 }
+
+///////////////////////////////////////////////
+// functions for Alarm
+///////////////////////////////////////////////
 
 // interface Alarm
 // アラームがなることを確認するためのインターフェース
@@ -123,6 +136,36 @@ func countDown() {
 			ss = 59
 			mm--
 		}
+	}
+}
+
+///////////////////////////////////////////////
+// functions for time interrupt
+///////////////////////////////////////////////
+
+var chCnt1 chan bool = make(chan bool)
+var chCnt2 chan bool = make(chan bool)
+
+// var finished chan bool = make(chan bool)
+
+// 1s経過を見る
+func timer1s(ch chan<- bool) {
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			ch <- true
+			logger.Println("timer1s true send!")
+		}
+	}
+}
+
+// ボタンが押されたかを見る
+func pushStartStopChan(ch chan<- bool) {
+	if !rRelease {
+		ch <- true
+		logger.Println("pushStartStopChan true send!")
 	}
 }
 

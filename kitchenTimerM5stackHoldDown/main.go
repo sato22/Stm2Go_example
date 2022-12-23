@@ -1,7 +1,7 @@
 package main
 
 import (
-	mypackage "Stm2Go_example/kitchenTimerM5stackComposite/src"
+	mypackage "github.com/example/mypackage/src"
 
 	"tinygo.org/x/drivers/buzzer"
 	"tinygo.org/x/drivers/examples/ili9341/initdisplay"
@@ -72,10 +72,18 @@ type DebugMonitor struct{}
 
 var moni = DebugMonitor{}
 
+var label *mypackage.Label = mypackage.NewLabel(320, 240)
+
 func (m DebugMonitor) PrintVal(str string) {
 	// 一度文字の上に白い画像を配置することで文字を消去してから再び表示するため、チラつく
-	display.FillRectangle(0, 0, 320, 240, white)
-	tinyfont.WriteLine(display, &freesans.Bold18pt7b, 0, 135, str, black)
+	// display.FillRectangle(0, 0, 320, 240, white)
+	// tinyfont.WriteLine(display, &freesans.Bold18pt7b, 0, 135, str, black)
+
+	// 以下の形式だとチラつかない
+	label.FillScreen(white)
+	tinyfont.WriteLine(label, &freesans.Bold18pt7b, 10, 30, str, black)
+	display.DrawRGBBitmap(0, 0, label.Buf, label.W, label.H)
+
 }
 
 func main() {
@@ -112,7 +120,7 @@ func main() {
 
 	for {
 		mypackage.Input()
-		mypackage.EntryrootStm3Task()
+		mypackage.EntryrootStm2Task()
 		mypackage.Output()
 		time.Sleep(time.Millisecond * 10)
 	}

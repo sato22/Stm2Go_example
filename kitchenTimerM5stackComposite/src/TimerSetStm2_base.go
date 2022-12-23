@@ -7,10 +7,11 @@ package mypackage
 type TimerSetStm2State uint8
 
 const (
-	TimerSetStm2TimerIdle TimerSetStm2State = iota
+	TimerSetStm2Idle TimerSetStm2State = iota
 	TimerSetStm2AddOneMin
 	TimerSetStm2AddOneSec
 	TimerSetStm2TimerWaitRelease
+	TimerSetStm2Set
 )
 
 var TimerSetStm2Eod Eod
@@ -22,36 +23,31 @@ func init() {
 }
 
 func TimerSetStm2Initialize() {
-	TimerSetStm2CurrentState = TimerSetStm2TimerIdle
+	TimerSetStm2CurrentState = TimerSetStm2Idle
 }
 
 func TimerSetStm2Task() {
 	switch TimerSetStm2CurrentState {
-	case TimerSetStm2TimerIdle:
+	case TimerSetStm2Idle:
 		if TimerSetStm2Eod == Entry {
-			TimerSetStm2TimerIdleEntry()
+			TimerSetStm2IdleEntry()
 			TimerSetStm2Eod = Do
 		}
 		if TimerSetStm2Eod == Do {
-			TimerSetStm2TimerIdleDo()
-			if TimerSetStm2TimerIdleSecButtonPushCond() {
-				TimerSetStm2TimerIdleSecButtonPushAction()
+			TimerSetStm2IdleDo()
+			if TimerSetStm2IdleSecButtonPushCond() {
+				TimerSetStm2IdleSecButtonPushAction()
 				TimerSetStm2CurrentState = TimerSetStm2AddOneSec
 				TimerSetStm2Eod = Exit
 			}
-			if TimerSetStm2TimerIdlestartButtonPushCond() {
-				TimerSetStm2TimerIdlestartButtonPushAction()
-				TimerSetStm2CurrentState = TimerSetStm2TimerWaitRelease
-				TimerSetStm2Eod = Exit
-			}
-			if TimerSetStm2TimerIdleMinButtonPushCond() {
-				TimerSetStm2TimerIdleMinButtonPushAction()
+			if TimerSetStm2IdleMinButtonPushCond() {
+				TimerSetStm2IdleMinButtonPushAction()
 				TimerSetStm2CurrentState = TimerSetStm2AddOneMin
 				TimerSetStm2Eod = Exit
 			}
 		}
 		if TimerSetStm2Eod == Exit {
-			TimerSetStm2TimerIdleExit()
+			TimerSetStm2IdleExit()
 			TimerSetStm2Eod = Entry
 		}
 	case TimerSetStm2AddOneMin:
@@ -63,7 +59,7 @@ func TimerSetStm2Task() {
 			TimerSetStm2AddOneMinDo()
 			if TimerSetStm2AddOneMinMinButtonReleaseCond() {
 				TimerSetStm2AddOneMinMinButtonReleaseAction()
-				TimerSetStm2CurrentState = TimerSetStm2TimerIdle
+				TimerSetStm2CurrentState = TimerSetStm2Set
 				TimerSetStm2Eod = Exit
 			}
 		}
@@ -80,7 +76,7 @@ func TimerSetStm2Task() {
 			TimerSetStm2AddOneSecDo()
 			if TimerSetStm2AddOneSecSecButtonReleaseCond() {
 				TimerSetStm2AddOneSecSecButtonReleaseAction()
-				TimerSetStm2CurrentState = TimerSetStm2TimerIdle
+				TimerSetStm2CurrentState = TimerSetStm2Set
 				TimerSetStm2Eod = Exit
 			}
 		}
@@ -98,6 +94,33 @@ func TimerSetStm2Task() {
 		}
 		if TimerSetStm2Eod == Exit {
 			TimerSetStm2TimerWaitReleaseExit()
+			TimerSetStm2Eod = Entry
+		}
+	case TimerSetStm2Set:
+		if TimerSetStm2Eod == Entry {
+			TimerSetStm2SetEntry()
+			TimerSetStm2Eod = Do
+		}
+		if TimerSetStm2Eod == Do {
+			TimerSetStm2SetDo()
+			if TimerSetStm2SetstartButtonPushCond() {
+				TimerSetStm2SetstartButtonPushAction()
+				TimerSetStm2CurrentState = TimerSetStm2TimerWaitRelease
+				TimerSetStm2Eod = Exit
+			}
+			if TimerSetStm2SetSecButtonPushCond() {
+				TimerSetStm2SetSecButtonReleaseAction()
+				TimerSetStm2CurrentState = TimerSetStm2AddOneSec
+				TimerSetStm2Eod = Exit
+			}
+			if TimerSetStm2SetMinButtonPushCond() {
+				TimerSetStm2SetMinButtonPushAction()
+				TimerSetStm2CurrentState = TimerSetStm2AddOneMin
+				TimerSetStm2Eod = Exit
+			}
+		}
+		if TimerSetStm2Eod == Exit {
+			TimerSetStm2SetExit()
 			TimerSetStm2Eod = Entry
 		}
 	}

@@ -81,7 +81,7 @@ func TestExample01(t *testing.T) {
 		for {
 			time.Sleep(10 * time.Millisecond)
 			Input()
-			rootStm0Task()
+			rootStm2Task()
 			Output()
 		}
 	},
@@ -92,13 +92,13 @@ func TestExample01(t *testing.T) {
 		logger.Println("----------------leftButtonPush-------------")
 		env.Sleep(1 * time.Second)
 		leftButton.Push()
-		env.Sleep(50 * time.Millisecond)
+		env.Sleep(5 * time.Second)
 		leftButton.Release()
 
 		logger.Println("----------------middleButtonPush-------------")
 		env.Sleep(1 * time.Second)
 		middleButton.Push()
-		env.Sleep(50 * time.Millisecond)
+		env.Sleep(5 * time.Second)
 		middleButton.Release()
 
 		logger.Println("----------------rightButtonPush-------------")
@@ -132,7 +132,7 @@ func TestExample02(t *testing.T) {
 		for {
 			time.Sleep(10 * time.Millisecond)
 			Input()
-			rootStm0Task()
+			rootStm2Task()
 			Output()
 		}
 	},
